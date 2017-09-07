@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class Application {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ContactNotOlderException {
 
         Datasource<Contact> contactDatasource = ContactsFromCSV.getDatasource();
         Addressbook addressbook = new Addressbook(contactDatasource.fetchAll());
@@ -22,16 +22,10 @@ public class Application {
 
         Optional<Contact> oldest = addressbook.determineOldestContact();
 
-        final int daysOlder;
-        try {
-            daysOlder = addressbook.calculateContactDaysOlderThan(
-                    addressbook.findContactByName("Jon").get(),
-                    addressbook.findContactByName("Paul").get()
-            );
-        } catch (ContactNotOlderException e) {
-            System.out.println(e.getMessage());
-        }
-
+        int daysOlder = addressbook.calculateContactDaysOlderThan(
+            addressbook.findContactByName("Jon").get(),
+            addressbook.findContactByName("Paul").get()
+        );
 
 
 

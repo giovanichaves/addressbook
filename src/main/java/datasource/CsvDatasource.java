@@ -11,19 +11,24 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 abstract class CsvDatasource<T> implements Datasource {
 
+    private final URL fileUrl;
     private Class classType;
-    private final String fileLocation;
     private final CsvSchema schema;
 
-    CsvDatasource(String fileLocation, CsvSchema schema, Class classType) {
-        this.fileLocation = fileLocation;
+    CsvDatasource(String fileLocation, CsvSchema schema, Class classType) throws FileNotFoundException {
         this.schema = schema;
         this.classType = classType; //its bad, I know.. but we cant easily guess the Type on runtime for the reader
+
+        this.fileUrl = getClass().getClassLoader().getResource(fileLocation);
+        if (fileUrl == null) {
+            throw new FileNotFoundException("The specified datasource file " + fileLocation + " was not found");
+        }
     }
 
     @Override
@@ -37,13 +42,11 @@ abstract class CsvDatasource<T> implements Datasource {
                 .readerFor(classType)
                 .with(schema);
 
-        try (Reader reader = new FileReader(fileLocation)) {
+        try (Reader reader = new FileReader(fileUrl.getFile())) {
             MappingIterator<T> mi = objectReader.readValues(reader);
             while (mi.hasNext()) {
                 recordList.add(mi.next());
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("The specified datasource file was not found");
         } catch (IOException e) {
             System.out.println("There was an error reading the datasource file");
         }

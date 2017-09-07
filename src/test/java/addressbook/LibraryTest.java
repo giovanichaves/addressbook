@@ -20,7 +20,7 @@ public class LibraryTest {
                 new Book("Lord of the Rings", 1),
                 new Book("50 Shades of Gay", null),
                 new Book("The Hole Bible", 4),
-                new Book("Guiness Book", 2)
+                new Book("Guinness Book", 2)
         );
 
         library = new Library(booksList);

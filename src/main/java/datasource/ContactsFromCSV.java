@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 public class ContactsFromCSV extends CsvDatasource {
 
-    public static final String FILE_LOCATION = "src/main/resources/testdata/address-book.csv";
+    public static final String FILE_LOCATION = "testdata/address-book.csv";
 
     private ContactsFromCSV(CsvSchema schema) {
         super(FILE_LOCATION, schema, Contact.class);
