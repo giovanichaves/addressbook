@@ -3,15 +3,15 @@ package datasource;
 import addressbook.Contact;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
+import java.io.FileNotFoundException;
+
 public class ContactsFromCSV extends CsvDatasource {
 
-    public static final String FILE_LOCATION = "testdata/address-book.csv";
-
-    private ContactsFromCSV(CsvSchema schema) {
-        super(FILE_LOCATION, schema, Contact.class);
+    private ContactsFromCSV(String fileLocation, CsvSchema schema) throws FileNotFoundException {
+        super(fileLocation, schema, Contact.class);
     }
 
-    public static Datasource<Contact> getDatasource() {
+    public static Datasource<Contact> getDatasource(String fileLocation) throws FileNotFoundException {
         CsvSchema schema = CsvSchema.builder()
                 .addColumn("id")
                 .addColumn("name")
@@ -19,7 +19,7 @@ public class ContactsFromCSV extends CsvDatasource {
                 .addColumn("dob")
                 .build();
 
-        return new ContactsFromCSV(schema);
+        return new ContactsFromCSV(fileLocation, schema);
     }
 
 }

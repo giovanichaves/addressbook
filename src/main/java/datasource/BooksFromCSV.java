@@ -3,21 +3,21 @@ package datasource;
 import library.Book;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
+import java.io.FileNotFoundException;
+
 public class BooksFromCSV extends CsvDatasource {
 
-    public static final String FILE_LOCATION = "testdata/library.csv";
-
-    private BooksFromCSV(CsvSchema schema) {
-        super(FILE_LOCATION, schema, Book.class);
+    private BooksFromCSV(String fileLocation, CsvSchema schema) throws FileNotFoundException {
+        super(fileLocation, schema, Book.class);
     }
 
-    public static Datasource<Book> getDatasource() {
+    public static Datasource<Book> getDatasource(String fileLocation) throws FileNotFoundException {
         CsvSchema schema = CsvSchema.builder()
                 .addColumn("title")
                 .addColumn("renter")
                 .build();
 
-        return new BooksFromCSV(schema);
+        return new BooksFromCSV(fileLocation, schema);
     }
 
 }

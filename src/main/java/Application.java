@@ -7,15 +7,16 @@ import datasource.BooksFromCSV;
 import datasource.ContactsFromCSV;
 import datasource.Datasource;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class Application {
 
-    public static void main(String[] args) throws ContactNotOlderException {
+    public static void main(String[] args) throws ContactNotOlderException, FileNotFoundException {
 
-        Datasource<Contact> contactDatasource = ContactsFromCSV.getDatasource();
+        Datasource<Contact> contactDatasource = ContactsFromCSV.getDatasource("testdata/address-book.csv");
         Addressbook addressbook = new Addressbook(contactDatasource.fetchAll());
 
         int females = addressbook.calculateFemaleCount();
@@ -29,7 +30,7 @@ public class Application {
 
 
 
-        Datasource<Book> bookDatasource = BooksFromCSV.getDatasource();
+        Datasource<Book> bookDatasource = BooksFromCSV.getDatasource("testdata/library.csv");
         Library library = new Library(bookDatasource.fetchAll());
 
         Map<Integer,Integer> summary = library.summarizeRentalsPerPerson();
