@@ -1,6 +1,5 @@
 package datasource;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
