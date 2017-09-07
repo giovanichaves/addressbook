@@ -7,28 +7,20 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URL;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 abstract class CsvDatasource<T> implements Datasource {
 
-    private final URL fileUrl;
+    private final File csvFile;
     private Class classType;
     private final CsvSchema schema;
 
-    CsvDatasource(String fileLocation, CsvSchema schema, Class classType) throws FileNotFoundException {
+    CsvDatasource(File csvFile, CsvSchema schema, Class classType) {
+        this.csvFile = csvFile;
         this.schema = schema;
-        this.classType = classType; //its bad, I know.. but we cant easily guess the Type on runtime for the reader
-
-        this.fileUrl = getClass().getClassLoader().getResource(fileLocation);
-        if (fileUrl == null) {
-            throw new FileNotFoundException("The specified datasource file " + fileLocation + " was not found");
-        }
+        this.classType = classType; //its bad, I know.. but we cant easily guess the Type during runtime for the reader
     }
 
     @Override
@@ -42,7 +34,7 @@ abstract class CsvDatasource<T> implements Datasource {
                 .readerFor(classType)
                 .with(schema);
 
-        try (Reader reader = new FileReader(fileUrl.getFile())) {
+        try (Reader reader = new FileReader(csvFile)) {
             MappingIterator<T> mi = objectReader.readValues(reader);
             while (mi.hasNext()) {
                 recordList.add(mi.next());

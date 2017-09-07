@@ -3,12 +3,14 @@ package datasource;
 import library.Book;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 
 public class BooksFromCSV extends CsvDatasource {
 
-    private BooksFromCSV(String fileLocation, CsvSchema schema) throws FileNotFoundException {
-        super(fileLocation, schema, Book.class);
+    private BooksFromCSV(File csvFile, CsvSchema schema) throws FileNotFoundException {
+        super(csvFile, schema, Book.class);
     }
 
     public static Datasource<Book> getDatasource(String fileLocation) throws FileNotFoundException {
@@ -17,7 +19,12 @@ public class BooksFromCSV extends CsvDatasource {
                 .addColumn("renter")
                 .build();
 
-        return new BooksFromCSV(fileLocation, schema);
+        URL fileUrl = ContactsFromCSV.class.getClassLoader().getResource(fileLocation);
+        if (fileUrl == null) {
+            throw new FileNotFoundException("The specified datasource file " + fileLocation+ " was not found");
+        }
+
+        return new BooksFromCSV(new File(fileUrl.getFile()), schema);
     }
 
 }
