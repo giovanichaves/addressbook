@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
-public class ContactsFromCSV extends CsvDatasource {
+public class ContactsFromCSV extends CsvDatasource<Contact> {
 
     private ContactsFromCSV(File csvFile, CsvSchema schema) throws FileNotFoundException {
         super(csvFile, schema, Contact.class);

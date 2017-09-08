@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class CsvDatasource<T> implements Datasource {
+abstract class CsvDatasource<T> implements Datasource<T> {
 
     private final File csvFile;
     private Class classType;

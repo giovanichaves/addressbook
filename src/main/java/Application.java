@@ -1,41 +1,26 @@
 import addressbook.Addressbook;
-import addressbook.ContactNotOlderException;
-import library.Book;
 import addressbook.Contact;
-import library.Library;
+import addressbook.ContactNotOlderException;
 import datasource.BooksFromCSV;
 import datasource.ContactsFromCSV;
 import datasource.Datasource;
+import library.Book;
+import library.Library;
+import view.RudimentaryHtml;
 
-import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
 
 public class Application {
 
-    public static void main(String[] args) throws ContactNotOlderException, FileNotFoundException {
+    public static void main(String[] args) throws ContactNotOlderException, IOException {
 
         Datasource<Contact> contactDatasource = ContactsFromCSV.getDatasource("testdata/address-book.csv");
         Addressbook addressbook = new Addressbook(contactDatasource.fetchAll());
-
-        int females = addressbook.calculateFemaleCount();
-
-        Optional<Contact> oldest = addressbook.determineOldestContact();
-
-        int daysOlder = addressbook.calculateContactDaysOlderThan(
-            addressbook.findContactByName("Jon").get(),
-            addressbook.findContactByName("Paul").get()
-        );
-
-
-
         Datasource<Book> bookDatasource = BooksFromCSV.getDatasource("testdata/library.csv");
         Library library = new Library(bookDatasource.fetchAll());
 
-        Map<Integer,Integer> summary = library.summarizeRentalsPerPerson();
+        String html = new RudimentaryHtml().getHtml(addressbook, library);
 
-        List<Book> notRented = library.determineNotRentedBooks();
-
+        System.out.println(html);
     }
 }
