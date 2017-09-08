@@ -1,7 +1,19 @@
 <ul>
     <li>How many females are in the address book? A: {{females}}</li>
     <li>Who is the oldest person in the address book? A: {{oldest}}</li>
-    <li>Who has rented how many books? A: {{rentalSummary}}</li>
+    <li>Who has rented how many books? A:
+        <ul>
+        {{#rentalSummary}}
+            <li>{{key}}: {{value}}</li>
+        {{/rentalSummary}}
+        </ul>
+    </li>
     <li>Which books have not been rented? A: {{notRented}}</li>
     <li>How many days older is Jon than Paul? A: {{daysOlder}}</li>
+    <li>Who rented which book? A:
+        <ul>
+        {{#rentals}}
+            <li>{{key}}: {{value}}</li>
+        {{/rentals}}
+        </ul>
 </ul>

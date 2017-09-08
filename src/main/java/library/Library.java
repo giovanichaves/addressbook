@@ -15,12 +15,10 @@ public class Library {
         this.bookList = ImmutableList.copyOf(bookList);
     }
 
-    public Map<Integer, Integer> summarizeRentalsPerPerson() {
+    public Map<Integer, Integer> summarizeRentalsPerContact() {
         Map<Integer, Integer> summary = new HashMap<>();
 
-        bookList
-            .stream()
-            .filter(rental -> rental.getRenter() != null)
+        findRentedBooks()
             .forEach(rental -> {
                 Integer renter = rental.getRenter();
 
@@ -32,6 +30,13 @@ public class Library {
             });
 
         return summary;
+    }
+
+    public List<Book> findRentedBooks() {
+        return bookList
+                .stream()
+                .filter(rental -> rental.getRenter() != null)
+                .collect(Collectors.toList());
     }
 
     public List<Book> determineNotRentedBooks() {

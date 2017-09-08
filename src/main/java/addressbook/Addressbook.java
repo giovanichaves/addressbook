@@ -23,9 +23,7 @@ public class Addressbook {
     private int calculateGenderCount(Gender gender) {
         return (int) contactList
             .stream()
-            .filter(
-                contact -> contact.getGender() == gender
-            )
+            .filter(contact -> contact.getGender() == gender)
             .count();
     }
 
@@ -35,18 +33,25 @@ public class Addressbook {
                 .min(Comparator.comparing(Contact::getDob));
     }
 
-    public int calculateContactDaysOlderThan(Contact c1, Contact c2) throws ContactNotOlderException {
-        if (c1.getDob().isAfter(c2.getDob())) {
-            throw new ContactNotOlderException("Contact " + c1.getName() + " was born after " + c2.getName());
+    public int calculateContactDaysOlderThan(Contact olderContact, Contact youngerContact) throws ContactNotOlderException {
+        if (olderContact.getDob().isAfter(youngerContact.getDob())) {
+            throw new ContactNotOlderException("Contact " + olderContact.getName() + " was born after " + youngerContact.getName());
         }
 
-        return (int) DAYS.between(c1.getDob(), c2.getDob());
+        return (int) DAYS.between(olderContact.getDob(), youngerContact.getDob());
     }
 
     public Optional<Contact> findContactByName(String name) {
         return contactList
                 .stream()
                 .filter(contact -> contact.getName().equals(name))
+                .findFirst();
+    }
+
+    public Optional<Contact> findContactById(Integer id) {
+        return contactList
+                .stream()
+                .filter(contact -> contact.getId() == id)
                 .findFirst();
     }
 }

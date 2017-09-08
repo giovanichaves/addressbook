@@ -32,7 +32,7 @@ public class LibraryTest {
         expected.put(1, 1);
         expected.put(2, 2);
         expected.put(4, 1);
-        Assert.assertEquals(expected, library.summarizeRentalsPerPerson());
+        Assert.assertEquals(expected, library.summarizeRentalsPerContact());
     }
 
 
