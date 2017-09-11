@@ -48,38 +48,38 @@ public class RudimentaryHtml {
     private void assignRentalsVar() {
         Map<String, String> rentals = new HashMap<>();
         libraryService.findRentedBooks()
-                .forEach(book ->
-                        addressbookService
-                                .findContactById(book.getRenter())
-                                .ifPresent(renter -> {
+            .forEach(book ->
+                addressbookService
+                    .findContactById(book.getRenter())
+                    .ifPresent(renter -> {
 
-                                    if (!rentals.containsKey(renter.getName())) {
-                                        rentals.put(
-                                                renter.getName(),
-                                                book.getTitle()
-                                        );
-                                    } else {
-                                        rentals.put(
-                                                renter.getName(),
-                                                rentals.get(renter.getName()) + ", " + book.getTitle()
-                                        );
-                                    }
-                                })
-                );
+                        if (!rentals.containsKey(renter.getName())) {
+                            rentals.put(
+                                renter.getName(),
+                                book.getTitle()
+                            );
+                        } else {
+                            rentals.put(
+                                renter.getName(),
+                                rentals.get(renter.getName()) + ", " + book.getTitle()
+                            );
+                        }
+                    })
+            );
 
         templateVars.put("rentals", rentals.entrySet());
     }
 
     private void assignNotRentedBooksVar() {
         templateVars.put(
-                "notRented",
-                String.join(
-                        ", ",
-                        libraryService.findNotRentedBooks()
-                                .stream()
-                                .map(Book::getTitle)
-                                .collect(Collectors.toList())
-                )
+            "notRented",
+            String.join(
+                ", ",
+                libraryService.findNotRentedBooks()
+                    .stream()
+                    .map(Book::getTitle)
+                    .collect(Collectors.toList())
+            )
         );
     }
 

@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class FileWatch {
@@ -21,7 +20,7 @@ public class FileWatch {
         this.watchedDirUrl = watchedDirUrl;
     }
 
-    public void watchFilesChanged(List<String> constrainedWatchedFiles, Callable action) {
+    public void watchFilesChanged(List<String> constrainedWatchedFiles, Runnable action) {
         try {
             WatchService watchService = setupDirectoryWatchService(StandardWatchEventKinds.ENTRY_MODIFY);
 
@@ -32,12 +31,7 @@ public class FileWatch {
                 if (watchKey != null) {
 
                     if (eventAffectsWatchedFiles(constrainedWatchedFiles, watchKey)) {
-                        try {
-                            action.call();
-                        } catch (Exception e) {
-                            System.out.println("Callable action had errors");
-                            e.printStackTrace();
-                        }
+                        action.run();
                     }
 
                     watchKey.reset();

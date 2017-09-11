@@ -31,8 +31,8 @@ public class AddressbookService {
 
     public Optional<Contact> findOldestContact() {
         return addressbook.getContactList()
-                .stream()
-                .min(Comparator.comparing(Contact::getDob));
+            .stream()
+            .min(Comparator.comparing(Contact::getDob));
     }
 
     public int calculateContactDaysOlderThan(Contact olderContact, Contact youngerContact) throws ContactNotOlderException {
@@ -45,15 +45,15 @@ public class AddressbookService {
 
     public Optional<Contact> findContactByName(String name) {
         return addressbook.getContactList()
-                .stream()
-                .filter(contact -> contact.getName().equals(name))
-                .findFirst();
+            .stream()
+            .filter(contact -> contact.getName().equals(name))
+            .findFirst();
     }
 
     public Optional<Contact> findContactById(Integer id) {
         return addressbook.getContactList()
-                .stream()
-                .filter(contact -> contact.getId() == id)
-                .findFirst();
+            .stream()
+            .filter(contact -> contact.getId() == id)
+            .findFirst();
     }
 }
