@@ -8,11 +8,11 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class FileWatch {
+public class FileWatcher {
 
     private final URL watchedDirUrl;
 
-    public FileWatch(String watchedDir) throws FileNotFoundException {
+    public FileWatcher(String watchedDir) throws FileNotFoundException {
         URL watchedDirUrl = getClass().getClassLoader().getResource(watchedDir);
         if (watchedDirUrl == null) {
             throw new FileNotFoundException("Resource folder " + watchedDir + " not found");
@@ -43,19 +43,26 @@ public class FileWatch {
         } catch (InterruptedException e) {
             System.out.println("FileWatcher service was interrupted");
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+            System.exit(1);
         }
-
     }
 
-    private WatchService setupDirectoryWatchService(WatchEvent.Kind<Path> eventKind) throws URISyntaxException, IOException {
-        Path path = Paths.get(watchedDirUrl.toURI());
-        WatchService watchService = path.getFileSystem().newWatchService();
-        path.register(watchService, eventKind);
-        return watchService;
+    private WatchService setupDirectoryWatchService(WatchEvent.Kind<Path> eventKind) {
+        try {
+            Path path = Paths.get(watchedDirUrl.toURI());
+            WatchService watchService = path.getFileSystem().newWatchService();
+            path.register(watchService, eventKind);
+            return watchService;
+        } catch (IOException e) {
+            System.out.println("Failure setting up the Watch Service");
+            e.printStackTrace();
+            System.exit(2);
+        } catch (URISyntaxException e) {
+            System.out.println("Error parsing the watched directory path");
+            e.printStackTrace();
+            System.exit(3);
+        }
+        return null;
     }
 
     private boolean hasEventAffectedWatchedFiles(List<String> constrainedWatchedFiles, WatchKey watchKey) {

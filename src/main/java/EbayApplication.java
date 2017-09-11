@@ -2,7 +2,7 @@ import addressbook.AddressbookService;
 import addressbook.model.Addressbook;
 import addressbook.model.Contact;
 import datasource.Datasource;
-import datasource.csv.FileWatch;
+import datasource.csv.FileWatcher;
 import datasource.csv.BooksFromCSV;
 import datasource.csv.ContactsFromCSV;
 import datasource.csv.NotMatchingCsvMappingException;
@@ -21,13 +21,14 @@ public class EbayApplication {
         app.outputHtml();
 
         try {
-            FileWatch fileWatcher = new FileWatch("testdata");
+            FileWatcher fileWatcher = new FileWatcher("testdata");
             fileWatcher.watchChangedFiles(
                     Arrays.asList("address-book.csv", "library.csv"),
                     app::outputHtml
             );
         } catch (FileNotFoundException e) {
             System.out.println("FileWatcher service not up: " + e.getMessage());
+            System.exit(4);
         }
 
     }
@@ -44,8 +45,12 @@ public class EbayApplication {
             String hmtl = new RudimentaryHtml(addressbookService, libraryService).getHtml();
 
             System.out.println(hmtl);
-        } catch (NotMatchingCsvMappingException | FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
+            System.exit(4);
+        } catch (NotMatchingCsvMappingException e) {
+            System.out.println(e.getMessage());
+            System.exit(5);
         }
     }
 }
