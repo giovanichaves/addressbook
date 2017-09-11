@@ -1,11 +1,13 @@
-package datasource;
+package datasource.csv;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import datasource.Datasource;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -39,6 +41,10 @@ abstract class CsvDatasource<T> implements Datasource<T> {
             while (mi.hasNext()) {
                 recordList.add(mi.next());
             }
+        } catch (RuntimeJsonMappingException e) {
+            throw new NotMatchingCsvMappingException("The datasource file " + csvFile + " format " +
+                    "does not match the mapped model for " + classType
+            );
         } catch (IOException e) {
             System.out.println("There was an error reading the datasource file");
         }

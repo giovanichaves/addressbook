@@ -1,19 +1,21 @@
 package addressbook;
 
-import com.google.common.collect.ImmutableList;
+import addressbook.model.Addressbook;
+import addressbook.model.Contact;
+import addressbook.model.ContactNotOlderException;
+import addressbook.model.Gender;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public class Addressbook {
+public class AddressbookService {
 
-    private ImmutableList<Contact> contactList;
+    private final Addressbook addressbook;
 
-    public Addressbook(List<Contact> contactList) {
-        this.contactList = ImmutableList.copyOf(contactList);
+    public AddressbookService(Addressbook addressbook) {
+        this.addressbook = addressbook;
     }
 
     public int calculateFemaleCount() {
@@ -21,14 +23,14 @@ public class Addressbook {
     }
 
     private int calculateGenderCount(Gender gender) {
-        return (int) contactList
+        return (int) addressbook.getContactList()
             .stream()
             .filter(contact -> contact.getGender() == gender)
             .count();
     }
 
-    public Optional<Contact> determineOldestContact() {
-        return contactList
+    public Optional<Contact> findOldestContact() {
+        return addressbook.getContactList()
                 .stream()
                 .min(Comparator.comparing(Contact::getDob));
     }
@@ -42,14 +44,14 @@ public class Addressbook {
     }
 
     public Optional<Contact> findContactByName(String name) {
-        return contactList
+        return addressbook.getContactList()
                 .stream()
                 .filter(contact -> contact.getName().equals(name))
                 .findFirst();
     }
 
     public Optional<Contact> findContactById(Integer id) {
-        return contactList
+        return addressbook.getContactList()
                 .stream()
                 .filter(contact -> contact.getId() == id)
                 .findFirst();

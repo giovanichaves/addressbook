@@ -1,4 +1,4 @@
-package addressbook;
+package addressbook.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;

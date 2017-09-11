@@ -1,7 +1,8 @@
-package datasource;
+package datasource.csv;
 
-import addressbook.Contact;
+import addressbook.model.Contact;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import datasource.Datasource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +10,7 @@ import java.net.URL;
 
 public class ContactsFromCSV extends CsvDatasource<Contact> {
 
-    private ContactsFromCSV(File csvFile, CsvSchema schema) throws FileNotFoundException {
+    private ContactsFromCSV(File csvFile, CsvSchema schema) {
         super(csvFile, schema, Contact.class);
     }
 

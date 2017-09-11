@@ -1,6 +1,7 @@
-package datasource;
+package datasource.csv;
 
-import library.Book;
+import datasource.Datasource;
+import library.model.Book;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 import java.io.File;
@@ -9,7 +10,7 @@ import java.net.URL;
 
 public class BooksFromCSV extends CsvDatasource<Book> {
 
-    private BooksFromCSV(File csvFile, CsvSchema schema) throws FileNotFoundException {
+    private BooksFromCSV(File csvFile, CsvSchema schema) {
         super(csvFile, schema, Book.class);
     }
 

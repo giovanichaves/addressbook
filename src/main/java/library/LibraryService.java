@@ -1,18 +1,19 @@
 package library;
 
-import com.google.common.collect.ImmutableList;
+import library.model.Book;
+import library.model.Library;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Library {
+public class LibraryService {
 
-    private ImmutableList<Book> bookList;
+    private final Library library;
 
-    public Library(List<Book> bookList) {
-        this.bookList = ImmutableList.copyOf(bookList);
+    public LibraryService(Library library) {
+        this.library = library;
     }
 
     public Map<Integer, Integer> summarizeRentalsPerContact() {
@@ -33,14 +34,14 @@ public class Library {
     }
 
     public List<Book> findRentedBooks() {
-        return bookList
+        return library.getBookList()
                 .stream()
                 .filter(rental -> rental.getRenter() != null)
                 .collect(Collectors.toList());
     }
 
-    public List<Book> determineNotRentedBooks() {
-        return bookList
+    public List<Book> findNotRentedBooks() {
+        return library.getBookList()
                 .stream()
                 .filter(rental -> rental.getRenter() == null)
                 .collect(Collectors.toList());

@@ -1,4 +1,4 @@
-package library;
+package library.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
