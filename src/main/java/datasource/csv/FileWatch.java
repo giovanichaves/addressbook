@@ -1,4 +1,4 @@
-package datasource;
+package datasource.csv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,17 +20,20 @@ public class FileWatch {
         this.watchedDirUrl = watchedDirUrl;
     }
 
-    public void watchFilesChanged(List<String> constrainedWatchedFiles, Runnable action) {
+    /**
+     * @param watchedFiles if empty, watches all files in directory
+     * @param action triggered when watched files are affected
+     */
+    public void watchChangedFiles(List<String> watchedFiles, Runnable action) {
         try {
             WatchService watchService = setupDirectoryWatchService(StandardWatchEventKinds.ENTRY_MODIFY);
 
-            WatchKey watchKey = null;
             while (true) {
-                watchKey = watchService.poll(1, TimeUnit.SECONDS);
+                WatchKey watchKey = watchService.poll(1, TimeUnit.SECONDS);
 
                 if (watchKey != null) {
 
-                    if (eventAffectsWatchedFiles(constrainedWatchedFiles, watchKey)) {
+                    if (hasEventAffectedWatchedFiles(watchedFiles, watchKey)) {
                         action.run();
                     }
 
@@ -40,29 +43,22 @@ public class FileWatch {
         } catch (InterruptedException e) {
             System.out.println("FileWatcher service was interrupted");
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
 
     }
 
-    private WatchService setupDirectoryWatchService(WatchEvent.Kind<Path> eventKind) {
-        WatchService watchService = null;
-        try {
-            Path path = Paths.get(watchedDirUrl.toURI());
-            watchService = path.getFileSystem().newWatchService();
-            path.register(watchService, eventKind);
-
-        } catch (IOException e) {
-            System.out.println("Failure setting up the Watch Service");
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            System.out.println("Error parsing the watched directory path");
-            e.printStackTrace();
-        }
-
+    private WatchService setupDirectoryWatchService(WatchEvent.Kind<Path> eventKind) throws URISyntaxException, IOException {
+        Path path = Paths.get(watchedDirUrl.toURI());
+        WatchService watchService = path.getFileSystem().newWatchService();
+        path.register(watchService, eventKind);
         return watchService;
     }
 
-    private boolean eventAffectsWatchedFiles(List<String> constrainedWatchedFiles, WatchKey watchKey) {
+    private boolean hasEventAffectedWatchedFiles(List<String> constrainedWatchedFiles, WatchKey watchKey) {
         return constrainedWatchedFiles.isEmpty() ||
                 watchKey
                     .pollEvents()

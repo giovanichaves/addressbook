@@ -2,7 +2,7 @@ import addressbook.AddressbookService;
 import addressbook.model.Addressbook;
 import addressbook.model.Contact;
 import datasource.Datasource;
-import datasource.FileWatch;
+import datasource.csv.FileWatch;
 import datasource.csv.BooksFromCSV;
 import datasource.csv.ContactsFromCSV;
 import datasource.csv.NotMatchingCsvMappingException;
@@ -22,7 +22,7 @@ public class EbayApplication {
 
         try {
             FileWatch fileWatcher = new FileWatch("testdata");
-            fileWatcher.watchFilesChanged(
+            fileWatcher.watchChangedFiles(
                     Arrays.asList("address-book.csv", "library.csv"),
                     app::outputHtml
             );
