@@ -16,7 +16,8 @@ public class Book {
 
     private Book(
             @JsonProperty("title") String title,
-            @JsonProperty("renter") String renter) {
+            @JsonProperty("renter") String renter
+    ) {
         //Jackson lib doesnt recognize uppercase NULL as literal, so we need to handle manually
         this(title, "NULL".equals(renter) ? null : Integer.valueOf(renter));
     }
