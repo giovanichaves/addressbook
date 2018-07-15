@@ -20,7 +20,7 @@ public class BooksFromCSV extends CsvDatasource<Book> {
                 .addColumn("renter")
                 .build();
 
-        URL fileUrl = ContactsFromCSV.class.getClassLoader().getResource(fileLocation);
+        URL fileUrl = BooksFromCSV.class.getClassLoader().getResource(fileLocation);
         if (fileUrl == null) {
             throw new FileNotFoundException("The specified datasource file " + fileLocation+ " was not found");
         }
