@@ -42,9 +42,9 @@ public class EbayApplication {
             Datasource<Book> bookDatasource = BooksFromCSV.getDatasource("testdata/library.csv");
             Library library = new Library(bookDatasource.fetchAll());
             LibraryService libraryService = new LibraryService(library);
-            String hmtl = new RudimentaryHtml(addressbookService, libraryService).getHtml();
+            String html = new RudimentaryHtml(addressbookService, libraryService).getHtml();
 
-            System.out.println(hmtl);
+            System.out.println(html);
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
             System.exit(4);
